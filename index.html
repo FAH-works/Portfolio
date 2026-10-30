@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Fayeza Afrah Hissan — Portfolio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream:    '#FAF6EE',
+            sagewash: '#D6E2C8',
+            beige:    '#EFE7D8',
+            sage:     '#8C9A7B',
+            forest:   '#5B6B52',
+            chocolate:'#5C2E00',
+            ink:      '#3B392F',
+            muted:    '#837F6E',
+          },
+          fontFamily: {
+            display: ['Fraunces', 'serif'],
+            body: ['IBM Plex Sans', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    summary { list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-40px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(40px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    .hero-photo-wrap { animation: slideInLeft 1.2s ease both; }
+    .hero-text       { animation: slideInRight 1.2s ease 0.5s both; }
+
+    .photo-ring-wrap { position: relative; width: fit-content; }
+    .photo-ring-svg {
+      position: absolute; inset: -14px;
+      width: calc(100% + 28px); height: calc(100% + 28px);
+      transform: rotate(-90deg);
+    }
+    .photo-ring-circle {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      animation: draw-ring 1.4s ease 0.3s forwards;
+    }
+    @keyframes draw-ring { to { stroke-dashoffset: 0; } }
+    .hero-photo { display: block; border: 4px solid #FAF6EE; border-radius: 50%; position: relative; z-index: 1; }
+
+    .typing-cursor { display: inline-block; margin-left: 2px; color: #5B6B52; animation: blink 0.8s steps(1) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: 10px; }
+    .tag-cloud-item {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transform: rotate(var(--rot, 0deg));
+      transition: transform 0.2s ease;
+      cursor: default;
+    }
+    .tag-cloud-item:hover { transform: rotate(0deg) scale(1.08); }
+
+    .project-visual {
+      background-image: radial-gradient(rgba(91,107,82,0.18) 1px, transparent 1px);
+      background-size: 14px 14px;
+    }
+    .project-visual svg { transition: transform 0.4s ease; }
+    .project-card {
+      position: absolute; top: 0; left: 50%;
+      width: 300px; height: 400px; margin-left: -150px;
+      background: #FAF6EE;
+      transition: transform 0.7s cubic-bezier(.22,.8,.25,1),
+                  opacity 0.7s ease, box-shadow 0.7s ease, filter 0.5s ease !important;
+      will-change: transform, opacity;
+      cursor: pointer;
+    }
+    .project-card:hover .project-visual svg { transform: scale(1.08); }
+    .project-card.is-blocked { filter: grayscale(1) blur(0.5px); cursor: default; }
+    .project-card.is-blocked a { pointer-events: none; }
+
+    .filter-chip {
+      font-size: 0.8rem; font-weight: 500;
+      padding: 6px 14px; border-radius: 999px;
+      border: 1px solid #D6E2C8; background: #FAF6EE; color: #5B6B52;
+      cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+    .filter-chip:hover { border-color: #8C9A7B; }
+    .filter-chip:focus-visible { outline: 2px solid #5B6B52; outline-offset: 2px; }
+    .filter-chip[aria-pressed="true"] { background: #5B6B52; border-color: #5B6B52; color: #FAF6EE; }
+    .filter-chip .n { opacity: 0.6; margin-left: 4px; }
+    #proj-prev:disabled, #proj-next:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
+
+    .cert-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .cert-card {
+      width: 100%; height: 110px;
+      object-fit: cover; border: 4px solid white; border-radius: 4px;
+      box-shadow: 0 6px 14px -6px rgba(59,57,47,0.3); cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, z-index 0s;
+    }
+    .cert-card:nth-child(odd)  { transform: rotate(-2deg); }
+    .cert-card:nth-child(even) { transform: rotate(2deg); }
+    .cert-card:hover {
+      transform: rotate(0deg) scale(1.12);
+      box-shadow: 0 14px 24px -8px rgba(59,57,47,0.4);
+      position: relative; z-index: 5;
+    }
+    .cert-modal-hidden { display: none; }
+    .cert-modal-visible { display: flex; }
+
+    .envelope { position: relative; width: 240px; height: 150px; cursor: pointer; transition: transform 0.3s ease; }
+    .envelope:hover { transform: translateY(-4px); }
+    .envelope-body {
+      position: absolute; inset: 0; top: 20px;
+      background: linear-gradient(135deg, #8C9A7B, #5B6B52);
+      border-radius: 4px; box-shadow: 0 15px 30px -10px rgba(91,107,82,0.4);
+    }
+    .letter {
+      position: absolute; left: 10%; right: 10%; top: 40px; height: 90px;
+      background: #FAF6EE; border: 1px solid #EFE7D8; border-radius: 3px 3px 0 0;
+      transition: transform 0.5s ease; z-index: 1;
+    }
+    .envelope-flap {
+      position: absolute; top: 20px; left: 0; width: 100%; height: 60px;
+      background: #5B6B52; clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top; transition: transform 0.5s ease; z-index: 2;
+    }
+    .envelope.opened .letter { transform: translateY(-70px); }
+    .envelope.opened .envelope-flap { transform: rotateX(180deg); }
+
+    .contact-form-hidden { display: none; }
+    .contact-form-visible { display: block; animation: fadeInUp 0.5s ease both; }
+
+    .contact-info-card {
+      background: var(--tilt-bg, #EFE7D8);
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: 0 10px 20px -10px rgba(59,57,47,0.25);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .contact-info-card:hover {
+      transform: translateY(-6px) rotateX(4deg);
+      box-shadow: 0 18px 30px -10px rgba(59,57,47,0.35);
+    }
+
+    .nav-link.active { color: #3B392F; }
+
+    #scroll-progress {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: linear-gradient(90deg, #8C9A7B, #5B6B52);
+      z-index: 60; width: 0%; transition: width 0.1s ease-out;
+    }
+    .edu-dot {
+      scale: 0;
+      transition: scale 0.5s cubic-bezier(.34,1.56,.64,1);
+    }
+    .edu-dot.on { scale: 1; }
+    .edu-entry > :not(.edu-dot) {
+      opacity: 0; transform: translateY(14px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .edu-entry.on > :not(.edu-dot) { opacity: 1; transform: none; }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #FAF6EE; }
+    ::-webkit-scrollbar-thumb { background: #8C9A7B; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #5B6B52; }
+    html { scrollbar-width: thin; scrollbar-color: #8C9A7B #FAF6EE; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .hero-photo, .hero-text, .project-visual svg {
+        animation: none !important; transition: none !important;
+        opacity: 1 !important; transform: none !important;
+      }
+      .photo-ring-circle { animation: none !important; stroke-dashoffset: 0 !important; }
+    }
+  </style>
+</head>
+<body class="bg-cream text-ink font-body">
+  <div id="scroll-progress"></div>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="icon-facebook" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <path d="M14 22v-8h3l.5-4H14V7.5c0-1 .4-1.5 1.6-1.5h1.9V2.3C17.2 2.2 16.2 2 15 2c-2.6 0-4.5 1.6-4.5 4.5V10h-3v4h3v8H14z"/>
+      </symbol>
+      <symbol id="icon-researchgate" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <path d="M19.586 0c-.818 0-1.508.19-2.073.565-.563.377-.97.936-1.213 1.68a3.193 3.193 0 0 0-.112.437 8.365 8.365 0 0 0-.078.53 9 9 0 0 0-.05.727c-.01.282-.013.621-.013 1.016a31.121 31.123 0 0 0 .014 1.017 9 9 0 0 0 .05.727 7.946 7.946 0 0 0 .077.53h-.005a3.334 3.334 0 0 0 .113.438c.245.743.65 1.303 1.214 1.68.565.376 1.256.564 2.075.564.8 0 1.536-.213 2.105-.603.57-.39.94-.916 1.175-1.65.076-.235.135-.558.177-.93a10.9 10.9 0 0 0 .043-1.207v-.82c0-.095-.047-.142-.14-.142h-3.064c-.094 0-.14.047-.14.141v.956c0 .094.046.14.14.14h1.666c.056 0 .084.03.084.086 0 .36 0 .62-.036.865-.038.244-.1.447-.147.606-.108.385-.348.664-.638.876-.29.212-.738.35-1.227.35-.545 0-.901-.15-1.21-.353-.306-.203-.517-.454-.67-.915a3.136 3.136 0 0 1-.147-.762 17.366 17.367 0 0 1-.034-.656c-.01-.26-.014-.572-.014-.939a26.401 26.403 0 0 1 .014-.938 15.821 15.822 0 0 1 .035-.656 3.19 3.19 0 0 1 .148-.76 1.89 1.89 0 0 1 .742-1.01c.344-.244.593-.352 1.137-.352.508 0 .815.096 1.144.303.33.207.528.492.764.925.047.094.111.118.198.07l1.044-.43c.075-.048.09-.115.042-.199a3.549 3.549 0 0 0-.466-.742 3 3 0 0 0-.679-.607 3.313 3.313 0 0 0-.903-.41A4.068 4.068 0 0 0 19.586 0zM8.217 5.836c-1.69 0-3.036.086-4.297.086-1.146 0-2.291 0-3.007-.029v.831l1.088.2c.744.144 1.174.488 1.174 2.264v11.288c0 1.777-.43 2.12-1.174 2.263l-1.088.2v.832c.773-.029 2.12-.086 3.465-.086 1.29 0 2.951.057 3.667.086v-.831l-1.49-.2c-.773-.115-1.174-.487-1.174-2.264v-4.784c.688.057 1.29.057 2.206.057 1.748 3.123 3.41 5.472 4.355 6.56.86 1.032 2.177 1.691 3.839 1.691.487 0 1.003-.086 1.318-.23v-.744c-1.031 0-2.063-.716-2.808-1.518-1.26-1.376-2.95-3.582-4.355-6.074 2.32-.545 4.04-2.722 4.04-4.9 0-3.208-2.492-4.698-5.758-4.698zm-.515 1.29c2.406 0 3.839 1.26 3.839 3.552 0 2.263-1.547 3.782-4.097 3.782-.974 0-1.404-.03-2.063-.086v-7.19c.66-.059 1.547-.059 2.32-.059z"/>
+      </symbol>
+      <symbol id="icon-github" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2C6.5 2 2 6.6 2 12.2c0 4.5 2.9 8.3 6.8 9.6.5.1.7-.2.7-.5v-1.9c-2.8.6-3.4-1.3-3.4-1.3-.5-1.1-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.7.4-1.1.6-1.4-2.3-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.5-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 015 0c1.9-1.3 2.7-1 2.7-1 .6 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7 1 .7 2v3c0 .3.2.6.7.5A10.1 10.1 0 0022 12.2C22 6.6 17.5 2 12 2z"/>
+      </symbol>
+      <symbol id="icon-scholar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M2 9l10-5 10 5-10 5-10-5z"/><path d="M6 11v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/><path d="M22 9v6"/>
+      </symbol>
+      <symbol id="icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>
+      </symbol>
+      <symbol id="icon-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 3h3l2 5-2.5 1.5a12 12 0 006 6L16 13l5 2v3c0 1.1-.9 2-2 2C10.5 20 4 13.5 4 5c0-1.1.9-2 2-2z"/>
+      </symbol>
+      <symbol id="icon-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s7-7.5 7-12a7 7 0 10-14 0c0 4.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <header class="sticky top-0 bg-cream/70 backdrop-blur-sm border-b border-beige z-50">
+    <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="w-9 h-9 rounded-full bg-forest text-cream flex items-center justify-center font-display text-sm flex-shrink-0">FAH</span>
+        <span class="font-display text-lg">Fayeza Afrah Hissan</span>
+      </div>
+      <nav class="hidden md:flex gap-6 text-sm text-muted">
+        <a href="#about" class="nav-link hover:text-ink transition-colors">About</a>
+        <a href="#education" class="nav-link hover:text-ink transition-colors">Education</a>
+        <a href="#publications" class="nav-link hover:text-ink transition-colors">Publications</a>
+        <a href="#projects" class="nav-link hover:text-ink transition-colors">Projects</a>
+        <a href="#skills" class="nav-link hover:text-ink transition-colors">Skills</a>
+        <a href="#achievements" class="nav-link hover:text-ink transition-colors">Achievements</a>
+        <a href="#contact" class="nav-link hover:text-ink transition-colors">Contact</a>
+      </nav>
+
+      <details class="md:hidden relative">
+        <summary class="list-none cursor-pointer p-2 -m-2">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M3 6h18M3 12h18M3 18h18"/>
+          </svg>
+        </summary>
+        <div class="absolute right-0 mt-3 w-48 bg-cream border border-beige rounded-sm shadow-md p-4 flex flex-col gap-3 text-sm text-muted z-50">
+          <a href="#about" class="hover:text-ink">About</a>
+          <a href="#education" class="hover:text-ink">Education</a>
+          <a href="#publications" class="hover:text-ink">Publications</a>
+          <a href="#projects" class="hover:text-ink">Projects</a>
+          <a href="#skills" class="hover:text-ink">Skills</a>
+          <a href="#achievements" class="hover:text-ink">Achievements</a>
+          <a href="#contact" class="hover:text-ink">Contact</a>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <section class="max-w-5xl mx-auto justify-between px-6 pt-16 pb-20 flex flex-col md:flex-row items-center gap-12">
+    <div class="hero-photo-wrap flex-shrink-0">
+      <div class="photo-ring-wrap">
+        <svg class="photo-ring-svg" viewBox="0 0 220 220">
+          <defs>
+            <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#8C9A7B"/>
+              <stop offset="50%" stop-color="#5B6B52"/>
+              <stop offset="100%" stop-color="#D6E2C8"/>
+            </linearGradient>
+          </defs>
+          <circle cx="110" cy="110" r="103" fill="none" stroke="url(#ringGradient)"
+                  stroke-width="4" stroke-linecap="round" pathLength="100" class="photo-ring-circle"/>
+        </svg>
+        <img src="images/profile.jpeg" alt="Fayeza Afrah Hissan"
+            class="hero-photo w-48 h-48 md:w-56 md:h-56 rounded-full object-cover">
+      </div>
+    </div>
+    <div class="hero-text text-center md:text-left">
+      <h1 class="font-display text-4xl leading-tight text-chocolate">Hey, it's Fayeza.</h1>
+      <p class="mt-2 text-lg text-sage font-medium">
+        <span id="typing-text"></span><span class="typing-cursor">|</span>
+      </p>
+      <p class="mt-4 text-muted leading-relaxed max-w-lg">
+        A Computer Science and Engineering graduate-in-progress who is interested in the world of academia and is working towards that.
+      </p>
+      <div class="mt-6 flex flex-wrap gap-4 justify-center md:justify-start">
+        <a href="Fayeza Afrah Hissan CV.pdf" target="_blank" rel="noopener"
+          class="px-5 py-2.5 bg-forest text-cream text-sm rounded-sm hover:bg-cream hover:text-forest hover:border border-forest transition-colors">
+          Look At Resume
+        </a>
+        <a href="#contact"
+          class="px-5 py-2.5 bg-chocolate text-cream text-sm rounded-sm hover:bg-cream hover:text-forest hover:border border-forest transition-colors">
+          Get in Touch
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="w-full bg-sagewash border-t border-beige">
+    <div class="max-w-5xl mx-auto px-6 py-14 grid md:grid-cols-[1fr_260px] gap-10 items-center">
+      <div class="reveal">
+        <p class="text-sm text-muted mb-2">About</p>
+        <p class="font-display text-2xl leading-snug max-w-2xl">
+          A student who learns best by explaining things — to classmates, tutoring students, and now through research.
+        </p>
+        <p class="mt-4 text-muted max-w-2xl leading-relaxed">
+          I currently work as a Teaching Assistant at IIUC, and have completed my final thesis on graph neural networks. Before this, I spent four years building projects across the CSE curriculum — usually as the one reviewing and debugging everyone's work before it shipped. I've also tutored SSC-level students for three years and taught basic English to a Japanese student.
+        </p>
+
+        <div class="mt-10 grid grid-cols-3 gap-6 max-w-lg border-t border-beige pt-6">
+          <div>
+            <p class="font-display text-3xl text-forest">TA</p>
+            <p class="text-xs text-muted mt-1">Teaching Assistant, IIUC</p>
+          </div>
+          <div>
+            <p class="font-display text-3xl text-forest" data-count-to="2">0</p>
+            <p class="text-xs text-muted mt-1">Published IEEE papers</p>
+          </div>
+          <div>
+            <p class="font-display text-3xl text-forest" data-count-to="13">0</p>
+            <p class="text-xs text-muted mt-1">Academic projects</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal bg-amber-50 rounded-lg border border-beige shadow-sm p-6" style="transition-delay:0.15s">
+        <p class="text-xs uppercase tracking-wide text-muted mb-4">Interests</p>
+        <div class="tag-cloud">
+          <span class="tag-cloud-item" style="--rot:-3deg; background:#D6E2C8; color:#5B6B52;">Teaching &amp; Mentoring</span>
+          <span class="tag-cloud-item" style="--rot:2deg; background:#EFE7D8; color:#5C2E00;">Academic Writing</span>
+          <span class="tag-cloud-item" style="--rot:-1deg; background:#D6E2C8; color:#5B6B52;">Graph Neural Networks</span>
+          <span class="tag-cloud-item" style="--rot:3deg; background:#EFE7D8; color:#5C2E00;">Applied Machine Learning</span>
+          <span class="tag-cloud-item" style="--rot:-2deg; background:#D6E2C8; color:#5B6B52;">Academic Precision</span>
+        </div>
+      </div>
+  </section>
+
+<section id="education" class="max-w-5xl mx-auto px-6 py-14 border-t border-beige"> 
+  <p class="text-sm text-muted mb-12">Education</p> 
+  
+  <div id="edu-timeline" class="relative space-y-12">
+    
+    <div class="edu-entry relative flex flex-col md:flex-row md:justify-start items-start">
+      <div class="edu-dot absolute left-2 md:left-1/2 w-2.5 h-2.5 rounded-full bg-sage -translate-x-1/2 mt-2 z-10"></div>
+      
+      <div class="w-full md:w-[calc(60%-2rem)] pl-8 md:pl-0 md:pr-8">
+        <p class="font-display text-xl text-chocolate">B.Sc. in Computer Science and Engineering</p>
+        <p class="text-muted text-sm mt-0.5">International Islamic University Chittagong · 2022–2026 (expected)</p>
+        <p class="text-sm mt-2 text-muted">Current CGPA: 4.00 · Final semester completed.</p>
+        <p class="text-sm mt-1 text-muted">Results pending: Thesis, Field Work, General Viva.</p>
+      </div>
+    </div>
+
+    <div class="edu-entry relative flex flex-col md:flex-row md:justify-end items-start">
+      <div class="edu-dot absolute left-2 md:left-1/2 w-2.5 h-2.5 rounded-full bg-sage -translate-x-1/2 mt-2 z-10"></div>
+      
+      <div class="w-full md:w-[calc(50%-2rem)] pl-8 md:pl-8">
+        <p class="font-display text-xl text-chocolate">Higher Secondary Certificate</p>
+        <p class="text-muted text-sm mt-0.5">Chattogram Cantonment Public College · 2021</p>
+        <p class="text-sm mt-2 text-muted">GPA: 5.00</p>
+      </div>
+    </div>
+
+    <div class="edu-entry relative flex flex-col md:flex-row md:justify-end items-start">
+      <div class="edu-dot absolute left-2 md:left-1/2 w-2.5 h-2.5 rounded-full bg-sage -translate-x-1/2 mt-2 z-10"></div>
+      
+      <div class="w-full md:w-[calc(50%-2rem)] pl-8 md:pl-8">
+        <p class="font-display text-xl text-chocolate">Secondary School Certificate</p>
+        <p class="text-muted text-sm mt-0.5">Bangladesh Mahila Samiti Girls' High School and College · 2019</p>
+        <p class="text-sm mt-2 text-muted">GPA: 5.00</p>
+      </div>
+    </div>
+    <div class="absolute top-0 bottom-0 left-2 md:left-1/2 -ml-px w-0.5 bg-beige/60 !mt-0">
+      <div id="edu-line" class="w-full bg-forest" style="height:0"></div>
+    </div>
+  </div> 
+</section>
+
+  <section id="publications" class="w-full bg-sagewash border-t border-beige">
+    <div class="max-w-5xl mx-auto px-6 py-14">
+      <p class="text-sm text-muted mb-8">Publications</p>
+      <div class="reveal space-y-6">
+        <div class="border-t-2 border-forest pt-4">
+          <p class="leading-relaxed">
+            <strong>F. A. Hissan</strong>, A. M. Jahan and S. Karim, "Enhancing LSB Image Steganography Through Password Protection and Constraint Satisfaction-Based Message Filtering,"
+            <em>2026 IEEE 2nd International Conference on Quantum Photonics, Artificial Intelligence &amp; Networking (QPAIN)</em>, Chittagong, Bangladesh, 2026, pp. 1–6.
+          </p>
+          <a href="https://doi.org/10.1109/QPAIN69676.2026.11546392" target="_blank" rel="noopener noreferrer"
+             class="text-sage hover:text-forest underline text-sm inline-block mt-2">doi.org/10.1109/QPAIN69676.2026.11546392</a>
+          <p class="text-xs text-muted mt-1">1st author</p>
+        </div>
+        <div class="border-t-2 border-forest pt-4">
+          <p class="leading-relaxed">
+            A. M. Jahan, I. J. Worthy and <strong>F. A. Hissan</strong>, "Multi-Model Insider Threat Detection on Temporally Aggregated and Imbalanced Data: A Comparative Study Using SMOTE and Feature Ablation,"
+            <em>2026 IEEE 2nd International Conference on Quantum Photonics, Artificial Intelligence &amp; Networking (QPAIN)</em>, Chittagong, Bangladesh, 2026, pp. 1–6.
+          </p>
+          <a href="https://doi.org/10.1109/QPAIN69676.2026.11546056" target="_blank" rel="noopener noreferrer"
+             class="text-sage hover:text-forest underline text-sm inline-block mt-2">doi.org/10.1109/QPAIN69676.2026.11546056</a>
+          <p class="text-xs text-muted mt-1">3rd author</p>
+        </div>
+      </div>
+      <div class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+        <a href="https://www.researchgate.net/profile/Fayeza-Afrah-Hissan" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest underline">ResearchGate profile</a>
+        <a href="https://scholar.google.com/citations?user=azK6364AAAAJ&hl=en" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest underline">Google Scholar profile</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="max-w-5xl mx-auto px-6 py-14 border-t border-beige">
+    <p class="text-sm text-muted mb-5">Projects</p>
+
+    <div class="flex flex-wrap items-center gap-2" id="proj-filters" role="group" aria-label="Filter projects">
+      <button type="button" class="filter-chip" data-filter="all" aria-pressed="true">All</button>
+      <button type="button" class="filter-chip" data-filter="web" aria-pressed="false">Web</button>
+      <button type="button" class="filter-chip" data-filter="ml" aria-pressed="false">AI &amp; ML</button>
+      <button type="button" class="filter-chip" data-filter="security" aria-pressed="false">Security</button>
+      <button type="button" class="filter-chip" data-filter="systems" aria-pressed="false">Systems &amp; Networks</button>
+      <button type="button" class="filter-chip" data-filter="data" aria-pressed="false">Data &amp; Algorithms</button>
+    </div>
+    <p id="proj-filter-note" class="text-xs text-muted mt-3 min-h-[1rem]" aria-live="polite"></p>
+
+    <div class="relative mt-2">
+      <button id="proj-prev" aria-label="Scroll projects left"
+        class="flex absolute -left-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-cream border border-beige shadow items-center justify-center text-forest hover:bg-forest hover:text-cream transition-colors">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+
+      <div class="reveal overflow-hidden py-10">
+        <div id="project-track" class="relative" style="height:400px; perspective:1400px; touch-action:pan-y;">
+
+          <div class="project-card flex-shrink-0 w-[300px] snap-center border border-beige rounded-sm overflow-hidden transition-all duration-300" data-cats="web">
+            <div class="project-visual h-30 flex items-center justify-center bg-gradient-to-br from-sage/20 to-forest/10">
+              <img src="images/immunify.png" alt="Project image" class="w-full h-full object-cover object-top">
+            </div>
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-3">
+                <p class="font-display text-lg leading-snug">Immunify</p>
+                <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm whitespace-nowrap">Web development</span>
+              </div>
+              <p class="text-sm text-muted mt-2 leading-relaxed">A COVID-19 vaccine registration web system (PHP, HTML, CSS) hosted on XAMPP for secure appointment booking.</p>
+              <a href="http://fah13.infinityfree.me/immunify/homepage.html" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View Website →</a>
+            </div>
+          </div>
+
+                    <div class="project-card flex-shrink-0 w-[300px] snap-center border border-beige rounded-sm overflow-hidden transition-all duration-300" data-cats="web security">
+            <div class="project-visual h-30 flex items-center justify-center bg-gradient-to-br from-sage/20 to-forest/10">
+              <img src="images/hideseek.png" alt="Project image" class="w-full h-full object-cover object-top">
+            </div>
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-3">
+                <p class="font-display text-lg leading-snug">Hide &amp; Seek</p>
+                <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm whitespace-nowrap">Security</span>
+              </div>
+              <p class="text-sm text-muted mt-2 leading-relaxed">A steganography-based secure messaging platform (HTML, CSS, Python, Django) — the basis of my first-author IEEE paper.</p>
+              <a href="https://hideandseek625.pythonanywhere.com" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View Website →</a><br>
+              <a href="https://doi.org/10.1109/QPAIN69676.2026.11546392" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View Paper →</a>
+            </div>
+          </div>
+
+          <div class="project-card flex-shrink-0 w-[300px] snap-center border border-beige rounded-sm overflow-hidden transition-all duration-300" data-cats="web">
+            <div class="project-visual h-30 flex items-center justify-center bg-gradient-to-br from-sage/20 to-forest/10">
+              <img src="images/nutritrack.png" alt="Project image" class="w-full h-full object-cover object-top">
+            </div>
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-3">
+                <p class="font-display text-lg leading-snug">Nutri-Track Academia</p>
+                <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm whitespace-nowrap">Web development</span>
+              </div>
+              <p class="text-sm text-muted mt-2 leading-relaxed">A student meal-management system (PHP, HTML, CSS) handling ordering, billing, and BMI/BMR-based personalized menus.</p>
+              <a href="http://nutritrackacademia.infinityfreeapp.com/" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View Website →</a><br>
+              <a href="https://github.com/Israth29/Nutri_Track-Academy" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View Code →</a>
+            </div>
+          </div>
+
+          <div class="project-card flex-shrink-0 w-[300px] snap-center border border-beige rounded-sm overflow-hidden transition-all duration-300" data-cats="ml security">
+            <div class="project-visual h-30 flex items-center justify-center bg-gradient-to-br from-sage/20 to-forest/10">
+              <img src="images/insider-threat.png" alt="Project image" class="w-full h-full object-cover object-top">
+            </div>
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-3">
+                <p class="font-display text-lg leading-snug">Insider Threat Detection</p>
+                <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm whitespace-nowrap">Machine learning</span>
+              </div>
+              <p class="text-sm text-muted mt-2 leading-relaxed">Compared Random Forest, XGBoost, and SVM on imbalanced insider-threat data using SMOTE and feature ablation — published as a co-authored IEEE paper.</p>
+              <a href="https://doi.org/10.1109/QPAIN69676.2026.11546056" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View Paper →</a><br>
+              <a href="images/insider-threat-poster.png" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View Poster →</a>
+            </div>
+          </div>
+
+          <div class="project-card flex-shrink-0 w-[300px] snap-center border border-beige rounded-sm overflow-hidden transition-all duration-300" data-cats="ml">
+            <div class="project-visual h-30 flex items-center justify-center bg-gradient-to-br from-sage/20 to-forest/10">
+              <img src="images/urbasafe.png" alt="Project image" class="w-full h-full object-cover object-top">
+            </div>
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-3">
+                <p class="font-display text-lg leading-snug">UrbaSafe</p>
+                <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm whitespace-nowrap">Image processing</span>
+              </div>
+              <p class="text-sm text-muted mt-2 leading-relaxed">A saliency-guided framework analyzing urban imagery for safety perception, built on Google Colab.</p>
+              <a href="https://colab.research.google.com/drive/1Q71Sv5jHMxbRxszhLdC3DlDLntmzS-eC?usp=sharing" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View on Colab →</a><br>
+              <a href="https://drive.google.com/file/d/1KBAyQSxmPaAz1S1uGIFUsPnsxjaAP6Cm/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View Report →</a>
+            </div>
+          </div>
+
+          <div class="project-card flex-shrink-0 w-[300px] snap-center border border-beige rounded-sm overflow-hidden transition-all duration-300" data-cats="ml">
+            <div class="project-visual h-30 flex items-center justify-center bg-gradient-to-br from-sage/20 to-forest/10">
+              <img src="images/fuzzy.png" alt="Project image" class="w-full h-full object-cover object-top">
+            </div>
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-3">
+                <p class="font-display text-lg leading-snug">Fuzzy SVM vs. Standard SVM</p>
+                <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm whitespace-nowrap">Neural networks</span>
+              </div>
+              <p class="text-sm text-muted mt-2 leading-relaxed">Implemented and compared standard SVM against Fuzzy SVM across five financial classification datasets on Google Colab.</p>
+              <a href="https://drive.google.com/file/d/1C8ah_wndHWJKGCato5AXvNpQ8DkUHu7K/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View Report →</a><br>
+              <a href="https://colab.research.google.com/drive/1zu7b2TPNbLPjmBXLSbzaqkKnCSas4RZh?usp=sharing" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View on Colab →</a>
+            </div>
+          </div>
+
+          <div class="project-card flex-shrink-0 w-[300px] snap-center border border-beige rounded-sm overflow-hidden transition-all duration-300" data-cats="data">
+            <div class="project-visual h-30 flex items-center justify-center bg-gradient-to-br from-sage/20 to-forest/10">
+              <img src="images/future-focus.png" alt="Project image" class="w-full h-full object-cover object-top">
+            </div>
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-3">
+                <p class="font-display text-lg leading-snug">Future Focus</p>
+                <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm whitespace-nowrap">Algorithms</span>
+              </div>
+              <p class="text-sm text-muted mt-2 leading-relaxed">A C++ major-mapping assistant using the Knapsack algorithm to help students choose a university major based on skills, interests, and budget.</p>
+              <a href="https://drive.google.com/drive/folders/1R9rGZNahdZgmQ2qGGnVQDR7tDi9juKcW?usp=sharing" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View Files →</a>
+            </div>
+          </div>
+
+          <div class="project-card flex-shrink-0 w-[300px] snap-center border border-beige rounded-sm overflow-hidden transition-all duration-300" data-cats="systems">
+            <div class="project-visual h-30 flex items-center justify-center bg-gradient-to-br from-sage/20 to-forest/10">
+              <img src="images/zombie-os.png" alt="Project image" class="w-full h-full object-cover object-top">
+            </div>
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-3">
+                <p class="font-display text-lg leading-snug">Zombie Apocalypse OS</p>
+                <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm whitespace-nowrap">Operating systems</span>
+              </div>
+              <p class="text-sm text-muted mt-2 leading-relaxed">A simulated survival kernel in C++ implementing Banker's Algorithm, Variable Best-Fit allocation, and Preemptive Priority Scheduling.</p>
+              <a href="https://drive.google.com/drive/folders/1R21fpdtT8PK4UWEiT4vhnacI58AzSCju?usp=sharing" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View Files →</a>
+            </div>
+          </div>
+
+          <div class="project-card flex-shrink-0 w-[300px] snap-center border border-beige rounded-sm overflow-hidden transition-all duration-300" data-cats="security systems">
+            <div class="project-visual h-30 flex items-center justify-center bg-gradient-to-br from-sage/20 to-forest/10">
+              <img src="images/port-firewall.png" alt="Project image" class="w-full h-full object-cover object-top">
+            </div>
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-3">
+                <p class="font-display text-lg leading-snug">Port Knocking Firewall</p>
+                <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm whitespace-nowrap">Security</span>
+              </div>
+              <p class="text-sm text-muted mt-2 leading-relaxed">Implemented a port-knocking based firewall system on Kali Linux (VirtualBox) for a Computer Security course project.</p>
+              <a href="https://drive.google.com/file/d/1K8SPYmaUAcWLw1yYSV77BFb3A29nS20C/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View Report →</a>
+            </div>
+          </div>
+
+          <div class="project-card flex-shrink-0 w-[300px] snap-center border border-beige rounded-sm overflow-hidden transition-all duration-300" data-cats="systems">
+            <div class="project-visual h-30 flex items-center justify-center bg-gradient-to-br from-sage/20 to-forest/10">
+              <img src="images/traffic.jpeg" alt="Project image" class="w-full h-full object-cover object-top">
+            </div>
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-3">
+                <p class="font-display text-lg leading-snug">Automated Traffic Systemizer</p>
+                <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm whitespace-nowrap">Microprocessor / EEE</span>
+              </div>
+              <p class="text-sm text-muted mt-2 leading-relaxed">A physical Arduino-based traffic control model with timer-controlled lights, an automatic barrier, buzzer, and streetlights.</p>
+              <a href="https://drive.google.com/file/d/1yzeEOoXWOTTk1WkKwLBB9YppgZI8eJZD/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View Report →</a>
+            </div>
+          </div>
+
+          <div class="project-card flex-shrink-0 w-[300px] snap-center border border-beige rounded-sm overflow-hidden transition-all duration-300" data-cats="data">
+            <div class="project-visual h-30 flex items-center justify-center bg-gradient-to-br from-sage/20 to-forest/10">
+              <img src="images/flavors.png" alt="Project image" class="w-full h-full object-cover object-top">
+            </div>
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-3">
+                <p class="font-display text-lg leading-snug">Flavors &amp; Cravings</p>
+                <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm whitespace-nowrap">Database management</span>
+              </div>
+              <p class="text-sm text-muted mt-2 leading-relaxed">A relational database (Oracle) for a multi-store food distribution company — pricing, order tracking, and supply management across stores.</p>
+              <a href="https://drive.google.com/file/d/1h1lTOCyWQkAiSEdZHgSHN0cIj3XgRmWw/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View Report →</a>
+            </div>
+          </div>
+
+          <div class="project-card flex-shrink-0 w-[300px] snap-center border border-beige rounded-sm overflow-hidden transition-all duration-300" data-cats="ml systems">
+            <div class="project-visual h-30 flex items-center justify-center bg-gradient-to-br from-sage/20 to-forest/10">
+              <img src="images/smart-home.png" alt="Project image" class="w-full h-full object-cover object-top">
+            </div>
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-3">
+                <p class="font-display text-lg leading-snug">Smart Home Network</p>
+                <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm whitespace-nowrap">Networks</span>
+              </div>
+              <p class="text-sm text-muted mt-2 leading-relaxed">Built a smart-home network in OMNeT++ with connected devices (TV, AC, fridge, printer, washing machine), then applied machine learning for QoS monitoring and classification of IoT network traffic.</p>
+              <a href="https://colab.research.google.com/drive/19GiIoAaRfzmVcFKARxuviv6CFvNiM-dG?usp=sharing" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View on Colab →</a><br>
+              <a href="https://github.com/akhi-moon/Smart-Home-QoS-Monitoring-Classification-using-IoT-Network-Traffic_GroupA" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View Files →</a>
+            </div>
+          </div>
+
+          <div class="project-card flex-shrink-0 w-[300px] snap-center border border-beige rounded-sm overflow-hidden transition-all duration-300" data-cats="web">
+            <div class="project-visual h-30 flex items-center justify-center bg-gradient-to-br from-sage/20 to-forest/10">
+              <img src="images/make-me-pretty.png" alt="Make Me Pretty project image" class="w-full h-full object-cover object-top">
+            </div>
+            <div class="p-5">
+              <div class="flex items-start justify-between gap-3">
+                <p class="font-display text-lg leading-snug">Make Me Pretty</p>
+                <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm whitespace-nowrap">Web development</span>
+              </div>
+              <p class="text-sm text-muted mt-2 leading-relaxed">A MERN-stack e-commerce website for skincare, body care, hair care, and makeup, with separate customer, admin, and delivery dashboards. Built as a team project during field work.</p>
+              <a href="https://make-me-pretty.vercel.app" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View Website →</a><br>
+              <a href="https://github.com/ayeshaakhter01/Make_Me_Pretty" target="_blank" rel="noopener noreferrer" class="text-sage hover:text-forest text-sm underline inline-block mt-3">View Code →</a>
+            </div>
+          </div>
+                    
+        </div>
+      </div>
+
+      <button id="proj-next" aria-label="Scroll projects right"
+        class="flex absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-cream border border-beige shadow items-center justify-center text-forest hover:bg-forest hover:text-cream transition-colors">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <section id="skills" class="w-full bg-sagewash border-t border-beige">
+    <div class="max-w-5xl mx-auto px-6 py-14">
+      <p class="text-sm text-muted mb-8">Skills</p>
+      <div class="reveal space-y-6">
+        <div class="grid sm:grid-cols-[180px_1fr] gap-2 sm:gap-6">
+          <p class="text-sm text-muted">Programming languages</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">C</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">C++</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">Python</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">PHP</span>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-[180px_1fr] gap-2 sm:gap-6">
+          <p class="text-sm text-muted">Web &amp; databases</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">HTML</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">CSS</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">Django</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">Oracle DB</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">MERN</span>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-[180px_1fr] gap-2 sm:gap-6">
+          <p class="text-sm text-muted">Tools &amp; platforms</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">Google Colab</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">Kali Linux</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">Arduino</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">Codeblocks</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">XAMPP</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">LaTeX</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">MS Word</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">MS PowerPoint</span>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-[180px_1fr] gap-2 sm:gap-6">
+          <p class="text-sm text-muted">Competitive programming</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">Codeforces · 155+ problems</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">UVa · 56+ problems</span>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-[180px_1fr] gap-2 sm:gap-6">
+          <p class="text-sm text-muted">Languages</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">Bangla — native</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">English — fluent</span>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-[180px_1fr] gap-2 sm:gap-6">
+          <p class="text-sm text-muted">Others</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">Strong written &amp; verbal communication</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">Fast and accurate typing</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">Effective AI-prompting</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">Team collaboration</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">Reviewing, debugging of team projects</span>
+            <span class="text-xs font-medium text-forest bg-sage/15 px-2 py-1 rounded-sm">Punctuality with deadlines</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="achievements" class="max-w-5xl mx-auto px-6 py-14 border-t border-beige">
+    <p class="text-sm text-muted mb-8">Achievements &amp; Certifications</p>
+    <div class="grid md:grid-cols-[1fr_280px] gap-10 items-start">
+      <div class="reveal space-y-5">
+        <div class="flex gap-5 items-baseline">
+          <p class="text-sm text-chocolate font-medium w-16 flex-shrink-0">2026</p>
+          <p class="leading-relaxed">Author and Presenter, QPAIN 2026 (2026 IEEE 2nd International Conference on Quantum Photonics, Artificial Intelligence & Networking)</p>
+        </div>
+        <div class="flex gap-5 items-baseline">
+          <p class="text-sm text-chocolate font-medium w-16 flex-shrink-0">2025</p>
+          <p class="leading-relaxed">Champion, Intra-University Math Olympiad — Tech Fest</p>
+        </div>
+        <div class="flex gap-5 items-baseline border-t border-beige pt-5">
+          <p class="text-sm text-chocolate font-medium w-16 flex-shrink-0">2025</p>
+          <p class="leading-relaxed">Microsoft Certified: Ask Questions and Analyze Content with Microsoft 365 Copilot</p>
+        </div>
+        <div class="flex gap-5 items-baseline border-t border-beige pt-5">
+          <p class="text-sm text-chocolate font-medium w-16 flex-shrink-0">2024</p>
+          <p class="leading-relaxed">Student delegate, ICISET 2024 (International Conference on Innovation in Science, Engineering and Technology), IIUC</p>
+        </div>
+        <div class="flex gap-5 items-baseline border-t border-beige pt-5">
+          <p class="text-sm text-chocolate font-medium w-16 flex-shrink-0">2023</p>
+          <p class="leading-relaxed">1st Runner-up, Intra-University Math Olympiad — Tech Fest</p>
+        </div>
+      </div>
+
+      <div class="reveal" style="transition-delay:0.15s">
+        <p class="text-xs uppercase tracking-wide text-muted mb-4 text-center">Certificates</p>
+        <div class="cert-grid">
+          <img src="images/certficate-microsoft.png" alt="Certificate 1" class="cert-card" data-full="images/certficate-microsoft.png">
+          <img src="images/certificate-iciset.png" alt="Certificate 2" class="cert-card" data-full="images/certificate-iciset.png">
+          <img src="images/certificate-qpain-3636.png" alt="Certificate 3" class="cert-card" data-full="images/certificate-qpain-3636.png">
+          <img src="images/certificate-qpain-3640.png" alt="Certificate 4" class="cert-card" data-full="images/certificate-qpain-3640.png">
+          <img src="images/certificate-tech-23.png" alt="Certificate 5" class="cert-card" data-full="images/certificate-tech-23.png">
+          <img src="images/certificate-tech-25.png" alt="Certificate 6" class="cert-card" data-full="images/certificate-tech-25.png">
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="contact" class="w-full bg-sagewash border-t border-beige">
+    <div class="max-w-5xl mx-auto px-6 py-16">
+      <div class="grid md:grid-cols-2 gap-10 items-center">
+        <div class="reveal">
+          <p class="text-sm text-muted mb-4">Contact</p>
+          <p class="font-display text-2xl leading-snug">Studying, teaching, and building — happy to talk about any of it.</p>
+          <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4" style="perspective: 800px;">
+            <div class="contact-info-card" style="--tilt-bg:#D6E2C8;">
+              <svg class="w-5 h-5 text-forest mb-2"><use href="#icon-mail"/></svg>
+              <p class="text-xs text-muted">Email</p>
+              <a href="mailto:f.a.hissan1311@gmail.com" class="text-sm text-ink break-all hover:text-forest">f.a.hissan1311@gmail.com</a>
+            </div>
+            <div class="contact-info-card" style="--tilt-bg:#EFE7D8;">
+              <svg class="w-5 h-5 text-forest mb-2"><use href="#icon-phone"/></svg>
+              <p class="text-xs text-muted">Phone</p>
+              <p class="text-sm text-ink">01976504337</p>
+            </div>
+            <div class="contact-info-card" style="--tilt-bg:#D6E2C8;">
+              <svg class="w-5 h-5 text-forest mb-2"><use href="#icon-pin"/></svg>
+              <p class="text-xs text-muted">Location</p>
+              <p class="text-sm text-ink">Chittagong, Bangladesh</p>
+            </div>
+          </div>
+          <div class="mt-8 grid grid-cols-4 gap-4 max-w-md mx-auto">
+            <a href="https://facebook.com/Fayeza-Afrah-Hissan" target="_blank" rel="noopener noreferrer" class="group flex flex-col items-center gap-2">
+              <span class="w-11 h-11 rounded-full border border-forest/30 flex items-center justify-center text-forest text-lg group-hover:bg-forest group-hover:text-cream group-hover:-translate-y-1 transition-all"><svg class="w-5 h-5"><use href="#icon-facebook"/></svg></span>
+              <span class="text-xs text-muted group-hover:text-ink">Facebook</span>
+            </a>
+            <a href="https://github.com/FAH-works" target="_blank" rel="noopener noreferrer" class="group flex flex-col items-center gap-2">
+              <span class="w-11 h-11 rounded-full border border-forest/30 flex items-center justify-center text-forest text-lg group-hover:bg-forest group-hover:text-cream group-hover:-translate-y-1 transition-all"><svg class="w-5 h-5"><use href="#icon-github"/></svg></span>
+              <span class="text-xs text-muted group-hover:text-ink">GitHub</span>
+            </a>
+            <a href="https://www.researchgate.net/profile/Fayeza-Afrah-Hissan" target="_blank" rel="noopener noreferrer" class="group flex flex-col items-center gap-2">
+              <span class="w-11 h-11 rounded-full border border-forest/30 flex items-center justify-center text-forest text-lg group-hover:bg-forest group-hover:text-cream group-hover:-translate-y-1 transition-all"><svg class="w-5 h-5"><use href="#icon-researchgate"/></svg></span>
+              <span class="text-xs text-muted group-hover:text-ink">ResearchGate</span>
+            </a>
+            <a href="https://scholar.google.com/citations?user=azK6364AAAAJ&hl=en" target="_blank" rel="noopener noreferrer" class="group flex flex-col items-center gap-2">
+              <span class="w-11 h-11 rounded-full border border-forest/30 flex items-center justify-center text-forest text-lg group-hover:bg-forest group-hover:text-cream group-hover:-translate-y-1 transition-all"><svg class="w-5 h-5"><use href="#icon-scholar"/></svg></span>
+              <span class="text-xs text-muted group-hover:text-ink">Scholar</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="reveal" style="transition-delay:0.15s">
+          <div id="envelope" class="envelope mx-auto" role="button" tabindex="0" aria-label="Open contact form">
+            <div class="envelope-body"></div>
+            <div class="letter"></div>
+            <div class="envelope-flap"></div>
+          </div>
+          <p id="envelope-hint" class="text-center text-sm text-muted mt-4">Click the envelope to write a message</p>
+
+          <form id="contact-form" action="https://api.web3forms.com/submit" method="POST"
+                class="contact-form-hidden bg-amber-50 rounded-lg shadow-lg border border-beige p-8 space-y-4">
+            <input type="hidden" name="access_key" value="ccbc3d77-ade4-42f1-9e0c-acc2356562de">
+            <input type="hidden" name="subject" value="New message from your portfolio">
+            <input type="hidden" name="from_name" value="Portfolio Contact Form">
+            <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+            <div>
+              <label class="block text-sm text-muted mb-1" for="name">Name</label>
+              <input id="name" name="name" type="text" required class="w-full border border-beige rounded-sm px-3 py-2 bg-sage/10 focus:outline-none focus:border-sage text-sm">
+            </div>
+            <div>
+              <label class="block text-sm text-muted mb-1" for="email">Your email</label>
+              <input id="email" name="email" type="email" required class="w-full border border-beige rounded-sm px-3 py-2 bg-sage/10 focus:outline-none focus:border-sage text-sm">
+            </div>
+            <div>
+              <label class="block text-sm text-muted mb-1" for="message">Message</label>
+              <textarea id="message" name="message" rows="4" required class="w-full border border-beige rounded-sm px-3 py-2 bg-sage/10 focus:outline-none focus:border-sage text-sm"></textarea>
+            </div>
+            <button type="submit" class="w-full px-5 py-2.5 bg-forest text-cream text-sm rounded-sm hover:bg-sage transition-colors">Send message</button>
+            <p id="form-note" class="text-xs text-muted text-center"></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="cert-modal" class="cert-modal-hidden fixed inset-0 z-[70] items-center justify-center bg-ink/70 p-6">
+    <div class="relative max-w-2xl w-full">
+      <button id="cert-modal-close" aria-label="Close" class="absolute -top-10 right-0 text-cream text-2xl">&times;</button>
+      <img id="cert-modal-img" src="" alt="Certificate full view" class="w-full rounded-sm shadow-2xl">
+    </div>
+  </div>
+
+  <button id="back-to-top" aria-label="Back to top"
+          class="fixed bottom-6 right-6 w-11 h-11 rounded-full bg-forest text-cream shadow-lg flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 z-50">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </button>
+
+  <script>
+  (() => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const progressBar = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      const scrolled = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+      progressBar.style.width = scrolled + '%';
+    }, { passive: true });
+
+    const revealEls = document.querySelectorAll('.reveal');
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      revealEls.forEach(el => el.classList.add('reveal-visible'));
+    } else {
+      const revealIO = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('reveal-visible');
+            revealIO.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      revealEls.forEach(el => revealIO.observe(el));
+    }
+
+    const counters = document.querySelectorAll('[data-count-to]');
+    const animateCounter = (el) => {
+      const target = parseInt(el.dataset.countTo, 10);
+      if (reduceMotion || Number.isNaN(target)) { el.textContent = target; return; }
+      const duration = 900;
+      const start = performance.now();
+      const tick = (now) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(eased * target);
+        if (progress < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+    if (counters.length && 'IntersectionObserver' in window) {
+      const countIO = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            countIO.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.6 });
+      counters.forEach(el => countIO.observe(el));
+    } else {
+      counters.forEach(el => { el.textContent = el.dataset.countTo; });
+    }
+
+    const backBtn = document.getElementById('back-to-top');
+    if (backBtn) {
+      const toggleBackBtn = () => {
+        const show = window.scrollY > 500;
+        backBtn.classList.toggle('opacity-0', !show);
+        backBtn.classList.toggle('pointer-events-none', !show);
+      };
+      window.addEventListener('scroll', toggleBackBtn, { passive: true });
+      toggleBackBtn();
+      backBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+      });
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const id = link.getAttribute('href').slice(1);
+        const targetEl = document.getElementById(id);
+        if (targetEl) {
+          e.preventDefault();
+          targetEl.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+          history.pushState(null, '', `#${id}`);
+        }
+        const openMenu = link.closest('details');
+        if (openMenu) openMenu.removeAttribute('open');
+      });
+    });
+
+    const typingEl = document.getElementById('typing-text');
+    if (typingEl) {
+      const words = ['CS Graduate', 'Teaching Assistant', 'Researcher', 'Perfectionist'];
+      let wordIndex = 0, charIndex = 0, deleting = false;
+      const type = () => {
+        const current = words[wordIndex];
+        if (!deleting) {
+          charIndex++;
+          typingEl.textContent = current.slice(0, charIndex);
+          if (charIndex === current.length) { deleting = true; setTimeout(type, 1400); return; }
+        } else {
+          charIndex--;
+          typingEl.textContent = current.slice(0, charIndex);
+          if (charIndex === 0) { deleting = false; wordIndex = (wordIndex + 1) % words.length; }
+        }
+        setTimeout(type, deleting ? 45 : 90);
+      };
+      reduceMotion ? (typingEl.textContent = words[0]) : type();
+    }
+
+    const track = document.getElementById('project-track');
+    const prevBtn = document.getElementById('proj-prev');
+    const nextBtn = document.getElementById('proj-next');
+    if (track) {
+      const cards = Array.from(track.querySelectorAll('.project-card'));
+      const N = cards.length;
+      const catsOf = (c) => (c.dataset.cats || '').split(/\s+/).filter(Boolean);
+      let order = cards.slice();      // current left-to-right order of the ring
+      let matchCount = N;             // the first matchCount cards in `order` are "live"
+      let filter = 'all';
+      let active = 0;
+
+      const layout = () => {
+        const narrow = track.offsetWidth < 640;
+        const X = narrow ? [0, 190, 300] : [0, 250, 430];
+        const S = [1.05, 0.85, 0.68];
+        const R = [0, 40, 50];
+        const O = [1, 0.85, 0.45];
+
+        order.forEach((card, i) => {
+          const live = i < matchCount;
+          let o = (((i - active) % N) + N) % N;
+          if (o > N / 2) o -= N;
+          const abs = Math.abs(o), sign = Math.sign(o);
+          const a = Math.min(abs, 2);
+          const hidden = abs > 2;
+
+          const x = sign * (hidden ? X[2] + 60 : X[a]);
+          const s = hidden ? S[2] * 0.9 : S[a];
+          card.style.transform =
+            `translateX(${x}px) translateZ(${-a * 60}px) rotateY(${-sign * R[a]}deg) scale(${s})`;
+          card.style.opacity = hidden ? 0 : O[a] * (live ? 1 : 0.5);
+          card.style.zIndex = hidden ? 0 : 10 - a;
+          card.style.pointerEvents = (hidden || !live) ? 'none' : 'auto';
+          card.style.boxShadow = a === 0
+            ? '0 25px 50px -12px rgba(59,57,47,0.35)'
+            : '0 6px 14px -6px rgba(59,57,47,0.15)';
+          card.classList.toggle('is-blocked', !live);
+          card.inert = !live;
+          card.setAttribute('aria-hidden', hidden || !live);
+        });
+      };
+
+      // Moves only through the matching cards; blocked ones just stay in view, greyed out.
+      const go = (d) => {
+        if (matchCount < 2) return;
+        active = ((active + d) % matchCount + matchCount) % matchCount;
+        layout();
+      };
+
+      cards.forEach((card) => {
+        card.addEventListener('click', (e) => {
+          const i = order.indexOf(card);
+          if (i === active) return;
+          e.preventDefault(); e.stopPropagation();
+          if (i >= matchCount) return;
+          let d = i - active;
+          go(d);
+        }, true);
+      });
+
+      prevBtn?.addEventListener('click', () => go(-1));
+      nextBtn?.addEventListener('click', () => go(1));
+
+      let startX = null;
+      track.addEventListener('pointerdown', e => { startX = e.clientX; });
+      track.addEventListener('pointerup', e => {
+        if (startX === null) return;
+        const dx = e.clientX - startX;
+        if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+        startX = null;
+      });
+
+      // ---- Filtering ----
+      const chips = Array.from(document.querySelectorAll('.filter-chip'));
+      const note = document.getElementById('proj-filter-note');
+      const matches = (c, f) => f === 'all' || catsOf(c).includes(f);
+
+      chips.forEach(chip => {
+        const f = chip.dataset.filter;
+        const n = cards.filter(c => matches(c, f)).length;
+        chip.insertAdjacentHTML('beforeend', `<span class="n">${n}</span>`);
+      });
+
+      const applyFilter = (f) => {
+        filter = f;
+        const live = cards.filter(c => matches(c, f));
+        const rest = cards.filter(c => !matches(c, f));
+        order = live.concat(rest);   // matching cards first, original order kept inside each group
+        matchCount = live.length;
+        active = 0;
+        chips.forEach(ch => ch.setAttribute('aria-pressed', String(ch.dataset.filter === f)));
+        if (prevBtn) prevBtn.disabled = nextBtn.disabled = matchCount < 2;
+        if (note) note.textContent = f === 'all'
+          ? ''
+          : `Showing ${matchCount} of ${N} projects. The rest are greyed out.`;
+        layout();
+      };
+      chips.forEach(ch => ch.addEventListener('click', () => applyFilter(ch.dataset.filter)));
+
+      window.addEventListener('resize', layout);
+      if (reduceMotion) cards.forEach(c => c.style.setProperty('transition', 'none', 'important'));
+      applyFilter('all');
+    }
+
+    const envelope = document.getElementById('envelope');
+    const envelopeHint = document.getElementById('envelope-hint');
+    const contactFormEl = document.getElementById('contact-form');
+    if (envelope && contactFormEl) {
+      const openEnvelope = () => {
+        envelope.classList.add('opened');
+        if (envelopeHint) envelopeHint.style.display = 'none';
+        setTimeout(() => {
+          envelope.style.display = 'none';
+          contactFormEl.classList.remove('contact-form-hidden');
+          contactFormEl.classList.add('contact-form-visible');
+          contactFormEl.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'end' });
+        }, 500);
+      };
+      envelope.addEventListener('click', openEnvelope);
+      envelope.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openEnvelope(); }
+      });
+    }
+
+    const formEl = document.getElementById('contact-form');
+    const formNote = document.getElementById('form-note');
+    if (formEl && formNote) {
+      const submitBtn = formEl.querySelector('button[type="submit"]');
+      formEl.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+        formNote.textContent = '';
+        try {
+          const res = await fetch(formEl.action, {
+            method: 'POST',
+            headers: { 'Accept': 'application/json' },
+            body: new FormData(formEl)
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            formNote.textContent = 'Message sent ✓ Thank you, I will reply soon!';
+            formNote.className = 'text-xs text-forest text-center';
+            formEl.reset();
+          } else {
+            throw new Error(data.message || 'Failed');
+          }
+        } catch (err) {
+          formNote.textContent = 'Could not send. Please email me directly at f.a.hissan1311@gmail.com';
+          formNote.className = 'text-xs text-red-700 text-center';
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
+      });
+    }
+    const certModal = document.getElementById('cert-modal');
+    const certModalImg = document.getElementById('cert-modal-img');
+    const certModalClose = document.getElementById('cert-modal-close');
+    document.querySelectorAll('.cert-card').forEach(card => {
+      card.addEventListener('click', () => {
+        certModalImg.src = card.dataset.full;
+        certModal.classList.remove('cert-modal-hidden');
+        certModal.classList.add('cert-modal-visible');
+      });
+    });
+    const closeCertModal = () => {
+      certModal.classList.remove('cert-modal-visible');
+      certModal.classList.add('cert-modal-hidden');
+    };
+    certModalClose?.addEventListener('click', closeCertModal);
+    certModal?.addEventListener('click', (e) => { if (e.target === certModal) closeCertModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeCertModal(); });
+    
+    const eduTl = document.getElementById('edu-timeline');
+    const eduLine = document.getElementById('edu-line');
+    if (eduTl && eduLine) {
+      const eduEntries = Array.from(eduTl.querySelectorAll('.edu-entry'));
+      const updateEdu = () => {
+        const r = eduTl.getBoundingClientRect();
+        const y = window.innerHeight * 0.6 - r.top;
+        const h = reduceMotion ? r.height : Math.max(0, Math.min(r.height, y));
+        eduLine.style.height = h + 'px';
+        eduEntries.forEach(en => {
+          const dot = en.querySelector('.edu-dot');
+          const d = dot.getBoundingClientRect();
+          const reached = reduceMotion || (d.top + d.height / 2 - r.top) <= y;
+          dot.classList.toggle('on', reached);
+          en.classList.toggle('on', reached);
+        });
+      };
+      window.addEventListener('scroll', updateEdu, { passive: true });
+      window.addEventListener('resize', updateEdu);
+      updateEdu();
+    }
+
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    if (sections.length && navLinks.length && 'IntersectionObserver' in window) {
+      const navIO = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            navLinks.forEach(link => {
+              link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`);
+            });
+          }
+        });
+      }, { threshold: 0, rootMargin: '-80px 0px -60% 0px' });
+      sections.forEach(sec => navIO.observe(sec));
+    }
+  })();
+  </script>
+
+</body>
+</html>
